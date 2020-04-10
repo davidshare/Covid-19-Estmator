@@ -1,0 +1,44 @@
+.modal-content{
+  overflow-y: auto;
+}
+
+form{
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  .input-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  
+    label{
+      font-size: 0.8em;
+      margin-bottom: 5px;
+    }
+    
+    input, select{
+      background-color: #f9f9f9;
+      font-size: 1em;
+      padding: 10px;;
+      border: 0;
+      border: 1px solid #f0eeee;
+      border-radius: 5px;
+    }
+  }
+
+  button{
+    font-size: 1em;
+    padding: 8px;
+    background-color: #626262;
+    color: #f9f9f9;
+    border: 0;
+    border-radius: 5px;
+
+    &:hover{
+      cursor: pointer;
+      color: #626262;
+      border: 1px solid #626262;
+      background-color: #f9f9f9;
+    }
+  }
+}
