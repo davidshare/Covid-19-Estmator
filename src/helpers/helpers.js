@@ -20,13 +20,13 @@ export const availableBeds = (totalHospitalBeds, severeCasesByRequestedTime) => 
 };
 
 export const infectionProjections = (currentlyInfected, days) => {
-  const projection = currentlyInfected * (2 ** Math.trunc(days / 3));
+  const projection = currentlyInfected * (2 ** Math.floor(days / 3));
   return projection;
 };
 
 export const moneyLost = (infectionsByRequestedTime, percentageIncome, avgIncome, days) => {
-  const estimatedLoss = infectionsByRequestedTime * percentageIncome * avgIncome * days;
-  return parseFloat(estimatedLoss.toFixed(2));
+  const estimatedLoss = (infectionsByRequestedTime * percentageIncome * avgIncome) / days;
+  return Math.floor(estimatedLoss);
 };
 
 export const impactCalculator = ({
@@ -46,8 +46,8 @@ export const impactCalculator = ({
     infectionsByRequestedTime,
     severeCasesByRequestedTime,
     hospitalBedsByRequestedTime: availableBeds(totalHospitalBeds, severeCasesByRequestedTime),
-    casesForICUByRequestedTime: Math.trunc(0.05 * infectionsByRequestedTime),
-    casesForVentilatorsByRequestedTime: Math.trunc(0.02 * infectionsByRequestedTime),
+    casesForICUByRequestedTime: Math.floor(0.05 * infectionsByRequestedTime),
+    casesForVentilatorsByRequestedTime: Math.floor(0.02 * infectionsByRequestedTime),
     dollarsInFlight: moneyLost(
       infectionsByRequestedTime,
       region.avgDailyIncomePopulation,

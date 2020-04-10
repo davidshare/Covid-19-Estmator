@@ -1,11 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './frontend/components/App/App';
+import express from 'express';
+import cors from 'cors';
 
-import './frontend/reset.scss';
+import routes from './routes';
+import requestLogger from './middleware';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const port = process.env.PORT || 5001;
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+const app = express();
+
+app.use(cors());
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(requestLogger);
+
+routes(app);
+
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+/* eslint-disable-next-line */
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    errors: {
+      message: err.message
+    }
+  });
+});
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port);
+}
+
+/* eslint-disable-next-line */
+console.log('app running on port ', port);
+
+export default app;

@@ -2,11 +2,12 @@ import Xml2js from 'xml2js';
 import fs from 'fs';
 import path from 'path';
 
-import { formatAPIResponse, jsonResponse } from '../estimator';
+import { formatAPIResponse, jsonResponse } from './estimator';
+import requestLogger from './middleware';
 
 /**
  * @param {object} app
- * @returns {object} undefine
+ * @returns {object} response object
  * @description function for handling routing
  */
 const routes = (app) => {
@@ -31,6 +32,7 @@ const routes = (app) => {
     try {
       const filePath = path.join(__dirname, 'request_logs.txt');
       const data = fs.readFileSync(filePath, 'utf8');
+      response.header('Content-Type', 'text/plain; charset=UTF-8');
       response.status(200).send(data);
     } catch (error) {
       throw new Error('Sorry, there was an issue reading the logs try');
@@ -41,6 +43,7 @@ const routes = (app) => {
     try {
       const filePath = path.join(__dirname, 'request_logs.txt');
       fs.unlinkSync(filePath);
+      requestLogger(request, response, () => {});
       response.status(201).send({
         message: 'logs deleted'
       });
