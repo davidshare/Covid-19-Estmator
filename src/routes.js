@@ -45,7 +45,7 @@ const routes = (app) => {
       fs.unlinkSync(filePath);
       requestLogger(request, response, () => {});
       response.status(201).send({
-        message: 'logs deleted'
+        message: 'The logs have been deleted'
       });
     } catch (error) {
       throw new Error('Sorry, there was an issue deleting the logs try');
